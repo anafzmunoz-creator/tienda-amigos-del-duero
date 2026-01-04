@@ -1,0 +1,1224 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tienda Amigos del Duero</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#111823;
+      --card2:#0f1620;
+      --text:#eaf2ff;
+      --muted:#a8b3c7;
+      --line:rgba(255,255,255,.08);
+      --accent:#22c55e;
+      --accent2:#ef4444;
+      --warning:#f59e0b;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius:18px;
+      --radius2:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(239,68,68,.18), transparent 55%),
+        radial-gradient(900px 600px at 90% 10%, rgba(34,197,94,.16), transparent 55%),
+        linear-gradient(180deg, #070a0f, #0b0f14 55%, #070a0f);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:22px}
+    /* Header */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar .wrap{display:flex;align-items:center;gap:14px}
+    .brand{
+      display:flex;align-items:center;gap:12px;min-width:260px;
+    }
+    .brand img{
+      width:44px;height:44px;border-radius:12px;
+      background:#fff; padding:6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .brand .title{display:flex;flex-direction:column;line-height:1.05}
+    .brand .title strong{font-size:14px;letter-spacing:.3px}
+    .brand .title span{font-size:12px;color:var(--muted)}
+    .search{
+      flex:1;
+      display:flex;align-items:center;gap:10px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+    }
+    .search input{
+      width:100%;
+      background:transparent;border:0;outline:0;color:var(--text);
+      font-size:14px;
+    }
+    .pillbar{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .pill:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .pill.active{
+      border-color: rgba(34,197,94,.45);
+      background: rgba(34,197,94,.12);
+    }
+    .actions{display:flex;align-items:center;gap:10px}
+    .iconbtn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+      font-size:12px;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .iconbtn:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .cartbtn{
+      border-color: rgba(239,68,68,.35);
+      background: rgba(239,68,68,.10);
+    }
+    .cartdot{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:20px;height:20px;padding:0 6px;
+      border-radius:999px;
+      background: rgba(239,68,68,.95);
+      color:#fff;font-weight:700;font-size:12px;
+    }
+
+    /* Layout */
+    .hero{
+      display:flex;align-items:flex-end;justify-content:space-between;
+      gap:16px;margin:18px 0 10px;
+    }
+    .hero h1{margin:0;font-size:26px;letter-spacing:.2px}
+    .hero p{margin:8px 0 0;color:var(--muted);max-width:70ch}
+    .note{
+      margin:12px 0 0;
+      padding:12px 14px;
+      border:1px solid rgba(245,158,11,.25);
+      background: rgba(245,158,11,.10);
+      border-radius: var(--radius2);
+      color: #ffe8b3;
+      font-size:13px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin:16px 0 28px;
+    }
+    .section{margin-top:22px}
+    .sectionhead{
+      display:flex;align-items:flex-end;justify-content:space-between;
+      gap:12px;margin:18px 0 10px;
+    }
+    .sectionhead h2{margin:0;font-size:18px}
+    .sectionhead span{color:var(--muted);font-size:12px}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 40px rgba(0,0,0,.22);
+      overflow:hidden;
+    }
+    .product{
+      grid-column: span 3;
+      display:flex;flex-direction:column;
+      min-height: 370px;
+    }
+    @media (max-width: 1050px){ .product{grid-column: span 4;} }
+    @media (max-width: 760px){
+      .brand{min-width:auto}
+      .pillbar{display:none}
+      .product{grid-column: span 6;}
+      .hero{flex-direction:column;align-items:flex-start}
+    }
+    @media (max-width: 520px){
+      .product{grid-column: span 12;}
+    }
+
+    .pimg{
+      height:180px;
+      background: rgba(255,255,255,.04);
+      display:flex;align-items:center;justify-content:center;
+      position:relative;
+    }
+    .pimg img{
+      width:100%;height:100%;object-fit:contain;
+      padding:10px;
+      filter: drop-shadow(0 18px 25px rgba(0,0,0,.35));
+    }
+    .ph{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:6px;color:rgba(255,255,255,.75);
+      font-size:12px;
+    }
+    .ph .box{
+      width:44px;height:44px;border-radius:14px;
+      background: rgba(255,255,255,.08);
+      border:1px dashed rgba(255,255,255,.22);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;
+    }
+    .pbody{padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;flex:1}
+    .ptop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .ptitle{font-weight:750;letter-spacing:.2px}
+    .pdesc{color:var(--muted);font-size:12px;line-height:1.35;min-height:32px}
+    .price{
+      font-weight:800;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .price.pending{
+      border-color: rgba(245,158,11,.35);
+      background: rgba(245,158,11,.10);
+      color:#ffe1a1;
+    }
+    .meta{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{
+      font-size:11px;color:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:6px 8px;border-radius:999px;
+    }
+    .row{display:flex;gap:10px;align-items:center;margin-top:auto}
+    .btn{
+      flex:1;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      border-radius: 12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:12px;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
+    .btn.primary{
+      border-color: rgba(34,197,94,.45);
+      background: rgba(34,197,94,.14);
+    }
+    .btn.danger{
+      border-color: rgba(239,68,68,.35);
+      background: rgba(239,68,68,.12);
+    }
+
+    /* Packs */
+    .pack{grid-column: span 12; padding:14px}
+    .packgrid{display:grid;grid-template-columns: repeat(12, 1fr); gap:12px; margin-top:10px}
+    .pack .left{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+    }
+    .pack h3{margin:0;font-size:16px}
+    .pack p{margin:6px 0 0;color:var(--muted);font-size:12px;max-width:80ch}
+    .mini{grid-column: span 4;}
+    @media (max-width: 760px){ .mini{grid-column: span 12;} }
+    .mini .pimg{height:150px}
+
+    /* Cart drawer */
+    .drawerback{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none; z-index:80;
+    }
+    .drawer{
+      position:fixed; top:0; right:0; height:100%; width:min(420px, 92vw);
+      background: #0c121a;
+      border-left: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transform: translateX(100%);
+      transition: transform .18s ease;
+      z-index:90;
+      display:flex;flex-direction:column;
+    }
+    .drawer.open{transform: translateX(0)}
+    .drawerback.open{display:block}
+    .dhead{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .dhead strong{font-size:14px}
+    .closex{cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);border-radius:12px;padding:8px 10px}
+    .dlist{padding:12px 14px;overflow:auto;flex:1}
+    .item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 10px;
+      background: rgba(255,255,255,.03);
+      display:flex;gap:10px;align-items:flex-start;
+      margin-bottom:10px;
+    }
+    .thumb{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:contain;padding:6px}
+    .itxt{flex:1}
+    .iname{font-weight:750;font-size:12px;margin:0 0 3px}
+    .isub{color:var(--muted);font-size:11px;margin:0}
+    .iqty{display:flex;gap:6px;align-items:center;margin-top:8px}
+    .qtybtn{
+      width:28px;height:28px;border-radius:10px;
+      border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);
+      cursor:pointer;
+    }
+    .qtynum{min-width:22px;text-align:center;font-weight:800;font-size:12px}
+    .remove{margin-left:auto}
+    .df{padding:14px;border-top:1px solid var(--line)}
+    .sumrow{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:10px;color:var(--muted)}
+    .sumrow strong{color:var(--text)}
+    .form{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;
+      margin-top:12px;
+    }
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field label{font-size:11px;color:var(--muted)}
+    .field input, .field textarea, .field select{
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 10px;
+      color:var(--text);
+      outline:none;
+      font-size:12px;
+    }
+    .field textarea{grid-column: span 2; min-height:70px; resize: vertical}
+    .full{grid-column: span 2}
+    .footer{
+      margin:28px 0 10px;
+      color:var(--muted);font-size:12px;
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      border-top:1px solid var(--line);padding-top:14px;
+    }
+    .smalllink{color:rgba(255,255,255,.8);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)}
+  
+    /* Modals */
+    .modalback{position:fixed; inset:0; background:rgba(0,0,0,.65); display:none; z-index:100;}
+    .modalback.open{display:block}
+    .modal{
+      position:fixed; inset:auto; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:min(860px, 92vw); max-height:86vh; overflow:auto;
+      background:#0c121a; border:1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow); z-index:110; display:none;
+    }
+    .modal.open{display:block}
+    .mhead{padding:14px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:10px}
+    .mhead strong{font-size:14px}
+    .mbody{padding:16px}
+    .mgrid{display:grid; grid-template-columns: 1.1fr .9fr; gap:14px}
+    @media (max-width:760px){ .mgrid{grid-template-columns:1fr} }
+    .mimg{background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius: var(--radius2); overflow:hidden; min-height:320px; display:flex; align-items:center; justify-content:center}
+    .mimg img{width:100%; height:100%; object-fit:contain; padding:14px; filter: drop-shadow(0 18px 25px rgba(0,0,0,.35));}
+    .mform{display:grid; gap:10px}
+    .mform .field{margin:0}
+    .mcta{display:flex; gap:10px; margin-top:6px}
+
+
+    /* Visibility tweaks */
+    .iconbtn{color:#ffffff !important; font-weight:800;}
+    .iconbtn:focus{outline:2px solid rgba(255,255,255,.35); outline-offset:2px}
+    .cartbtn{background: rgba(239,68,68,.20) !important; border-color: rgba(239,68,68,.55) !important;}
+    .cartbtn:hover{background: rgba(239,68,68,.26) !important;}
+    #sizeGuideBtn{background: rgba(255,255,255,.06) !important; border-color: rgba(255,255,255,.18) !important;}
+
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <img src="tienda_assets/logo.png" alt="C.D. Zamora Amigos del Duero" />
+        <div class="title">
+          <strong>C.D. Zamora Amigos del Duero</strong>
+          <span>Tienda oficial (pedidos por WhatsApp)</span>
+        </div>
+      </div>
+<div class="pillbar" id="pillbar"></div>
+
+      <div class="actions">
+        <button class="iconbtn" id="sizeGuideBtn" type="button">Guía de tallas</button>
+        <a id="igBtn" class="iconbtn" href="#" target="_blank" rel="noopener">Instagram</a>
+        <a id="fbBtn" class="iconbtn" href="#" target="_blank" rel="noopener">Facebook</a>
+        <button class="iconbtn cartbtn" id="openCartBtn" type="button">
+          Carrito <span class="cartdot" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Tienda del club</h1>
+        <p>Elige tus productos, añade talla y (si aplica) nombre y dorsal. Al final podrás <b>enviar el pedido por WhatsApp</b> al club con un solo clic.</p>
+
+        <div class="note" style="border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.10); color:#d8ffe7">
+          <b>Cómo funciona tu pedido</b>
+          <ol style="margin:10px 0 0; padding-left:18px; color:#d8ffe7; line-height:1.45; font-size:13px">
+            <li>Busca y elige productos, tallas y añade al carrito.</li>
+            <li>Rellena tus datos y (si corresponde) nombre y dorsal de la prenda.</li>
+            <li>Genera el resumen y envíalo por WhatsApp al club.</li>
+            <li>El club confirmará el importe final y podrás hacer la transferencia.</li>
+          </ol>
+          
+          <div style="margin-top:10px; color:#d8ffe7; font-size:13px">
+            <b>Cuenta bancaria del club</b><br>
+            Nº de cuenta (IBAN): <b>ES06 3085 0054 2320 9729 0718</b><br>
+            Titular: <b>C.D. Zamora Amigos del Duero</b><br><br>
+            <b>Concepto del pago:</b><br>
+            <i>Tienda Amigos del Duero + tu nombre</i><br>
+            <span style="opacity:.9">Ejemplo: <b>Tienda Amigos del Duero Ángel García</b></span><br><br>
+            <span style="color:rgba(255,255,255,.9)">Cuando recibamos el pago con ese concepto, el pedido quedará validado.</span>
+          </div>
+
+          <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; font-size:12px">
+            <span class="tag" style="background:rgba(255,255,255,.05)">Material oficial del club</span>
+            <span class="tag" style="background:rgba(255,255,255,.05)">Sin cambios ni devoluciones</span>
+            <span class="tag" style="background:rgba(255,255,255,.05)">Pago por transferencia bancaria (€)</span>
+          </div>
+        </div>
+
+</div>
+      <div style="text-align:right;color:var(--muted);font-size:12px">
+        <div>WhatsApp pedidos:</div>
+        <div style="font-weight:850;color:var(--text);font-size:14px">675 69 51 18</div>
+      </div>
+    </div>
+
+    <!-- Equipaciones (packs + porteras) -->
+    <div class="section" id="sec-equipaciones">
+      <div class="sectionhead">
+        <h2>Equipaciones</h2>
+        <span>Primera y segunda equipación (pack), y equipaciones de porteras</span>
+      </div>
+
+      <div class="grid" id="equipacionesGrid">
+        <!-- JS -->
+      </div>
+    </div>
+
+    <!-- Exterior -->
+    <div class="section" id="sec-exterior">
+      <div class="sectionhead">
+        <h2>Exterior</h2>
+        <span>Parka, chubasquero, chándal y sudaderas</span>
+      </div>
+      <div class="grid" id="exteriorGrid"></div>
+    </div>
+
+    <!-- Viaje -->
+    <div class="section" id="sec-viaje">
+      <div class="sectionhead">
+        <h2>Viaje</h2>
+        <span>Bolsas, mochilas y transporte</span>
+      </div>
+      <div class="grid" id="viajeGrid"></div>
+    </div>
+
+    <!-- Accesorios -->
+    <div class="section" id="sec-accesorios">
+      <div class="sectionhead">
+        <h2>Accesorios</h2>
+        <span>Bufanda, bandera y más</span>
+      </div>
+      <div class="grid" id="accesoriosGrid"></div>
+    </div>
+
+    <div class="footer">
+      <div>© C.D. Zamora Amigos del Duero</div>
+      <div>
+        <span>Para activar Instagram/Facebook, pega los enlaces del club en el script (variables <b>INSTAGRAM_URL</b> y <b>FACEBOOK_URL</b>).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer -->
+  <div class="drawerback" id="drawerBack"></div>
+  <aside class="drawer" id="drawer">
+    <div class="dhead">
+      <strong>Tu carrito</strong>
+      <button class="closex" id="closeCartBtn" type="button">Cerrar</button>
+    </div>
+
+    <div class="dlist" id="cartList"></div>
+
+    <div class="df">
+      <div class="sumrow"><span>Total (solo productos con precio)</span><strong id="cartTotal">0,00 €</strong></div>
+
+      <div class="form" id="orderForm">
+        <div class="field">
+          <label>Nombre y apellidos</label>
+          <input id="custName" placeholder="Ej: María Sobrado" />
+        </div>
+        <div class="field">
+          <label>Teléfono</label>
+          <input id="custPhone" placeholder="Ej: 6XX XXX XXX" />
+        </div>
+        <div class="field full">
+          <label>Notas (entrega, equipo, etc.)</label>
+          <textarea id="custNotes" placeholder="Escribe aquí cualquier detalle…"></textarea>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn" id="copyBtn" type="button">Copiar pedido</button>
+        <button class="btn primary" id="waBtn" type="button">Enviar por WhatsApp</button>
+      </div>
+      <button class="btn danger" id="clearBtn" type="button" style="margin-top:10px">Vaciar carrito</button>
+    </div>
+  </aside>
+
+
+  <!-- Modals -->
+  <div class="modalback" id="modalBack"></div>
+
+  <div class="modal" id="productModal" role="dialog" aria-modal="true" aria-label="Producto">
+    <div class="mhead">
+      <strong id="pmTitle">Producto</strong>
+      <button class="closex" id="pmClose" type="button">Cerrar</button>
+    </div>
+    <div class="mbody">
+      <div class="mgrid">
+        <div class="mimg" id="pmImgWrap"></div>
+        <div class="mform">
+          <div style="color:var(--muted); font-size:12px; line-height:1.45" id="pmDesc"></div>
+
+          <div class="field" id="pmSizeField" style="display:none">
+            <label>Talla</label>
+            <select id="pmSize"></select>
+          </div>
+
+          <div class="field" id="pmQtyField">
+            <label>Cantidad</label>
+            <select id="pmQty">
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option><option value="5">5</option>
+            </select>
+          </div>
+
+          <div class="field" id="pmNameField" style="display:none">
+            <label>Nombre (para la camiseta)</label>
+            <input id="pmName" placeholder="Ej: CLAUDIA">
+          </div>
+
+          <div class="field" id="pmNumberField" style="display:none">
+            <label>Dorsal</label>
+            <input id="pmNumber" placeholder="Ej: 8">
+          </div>
+
+          <div class="mcta">
+            <button class="btn" id="pmAdd" type="button">Añadir al carrito</button>
+            <button class="btn primary" id="pmAddGo" type="button">Añadir y ver carrito</button>
+          </div>
+
+          <div style="margin-top:6px; font-size:12px; color:var(--muted)">
+            <span id="pmPrice"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="sizeModal" role="dialog" aria-modal="true" aria-label="Guía de tallas">
+    <div class="mhead">
+      <strong>Guía de tallas</strong>
+      <button class="closex" id="smClose" type="button">Cerrar</button>
+    </div>
+    <div class="mbody" style="color:var(--text)">
+      <p style="margin:0 0 10px; color:var(--muted); font-size:12px; line-height:1.45">
+        Referencia orientativa. Si dudas entre dos tallas, elige la mayor.
+      </p>
+
+      <div class="card" style="padding:14px; margin-bottom:12px">
+        <div style="font-weight:800; margin-bottom:8px">Ropa (niño/a)</div>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:collapse; font-size:12px">
+            <thead>
+              <tr style="text-align:left; color:var(--muted)">
+                <th style="padding:8px; border-bottom:1px solid var(--line)">Talla</th>
+                <th style="padding:8px; border-bottom:1px solid var(--line)">Altura aprox.</th>
+                <th style="padding:8px; border-bottom:1px solid var(--line)">Edad aprox.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">6</td><td style="padding:8px; border-bottom:1px solid var(--line)">110–116 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">5–6</td></tr>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">8</td><td style="padding:8px; border-bottom:1px solid var(--line)">122–128 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">7–8</td></tr>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">10</td><td style="padding:8px; border-bottom:1px solid var(--line)">134–140 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">9–10</td></tr>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">12</td><td style="padding:8px; border-bottom:1px solid var(--line)">146–152 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">11–12</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px; margin-bottom:12px">
+        <div style="font-weight:800; margin-bottom:8px">Ropa (adulto)</div>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:collapse; font-size:12px">
+            <thead>
+              <tr style="text-align:left; color:var(--muted)">
+                <th style="padding:8px; border-bottom:1px solid var(--line)">Talla</th>
+                <th style="padding:8px; border-bottom:1px solid var(--line)">Pecho aprox.</th>
+                <th style="padding:8px; border-bottom:1px solid var(--line)">Altura aprox.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">S</td><td style="padding:8px; border-bottom:1px solid var(--line)">88–96 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">165–175 cm</td></tr>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">M</td><td style="padding:8px; border-bottom:1px solid var(--line)">96–104 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">170–180 cm</td></tr>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">L</td><td style="padding:8px; border-bottom:1px solid var(--line)">104–112 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">175–185 cm</td></tr>
+              <tr><td style="padding:8px; border-bottom:1px solid var(--line)">XL</td><td style="padding:8px; border-bottom:1px solid var(--line)">112–120 cm</td><td style="padding:8px; border-bottom:1px solid var(--line)">180–190 cm</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px">
+        <div style="font-weight:800; margin-bottom:8px">Medias (talla pie)</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px">
+          <span class="tag">28–31</span><span class="tag">32–35</span><span class="tag">36–39</span><span class="tag">40–43</span><span class="tag">44–47</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/** =========================
+ *  CONFIG
+ *  ========================= */
+const WHATSAPP_NUMBER_E164 = "34675695118"; // 34 + 675695118
+const INSTAGRAM_URL = "https://www.instagram.com/amigosdelduero_?igsh=ZWxlcmM0ZjlzMTBj&utm_source=qr"; // <-- pega aquí el enlace real del Instagram
+const FACEBOOK_URL  = "https://www.facebook.com/share/1BddZA1CDF/?mibextid=wwXIfr"; // <-- pega aquí el enlace real del Facebook
+
+document.getElementById("igBtn").href = INSTAGRAM_URL;
+document.getElementById("fbBtn").href = FACEBOOK_URL;
+
+/** =========================
+ *  DATOS
+ *  ========================= */
+const CATS = [
+  { id:"all", label:"Todo" },
+  { id:"equipaciones", label:"Equipaciones" },
+  { id:"exterior", label:"Exterior" },
+  { id:"viaje", label:"Viaje" },
+  { id:"accesorios", label:"Accesorios" }
+];
+
+// Productos (sueltos)
+const PRODUCTS = [
+  // Equipaciones porteras (precio pendiente)
+  {
+    id:"porteras-1a", cat:"equipaciones",
+    name:"Equipación Porteras 1ª",
+    desc:"Equipación completa (camiseta, pantalón y medias). Incluye nombre y número. Precio pendiente.",
+    price:null, sizes:["6","8","10","12","S","M","L","XL"], personalizable:true,
+    img:"tienda_assets/equipacion-porteras-1a.png"
+  },
+  {
+    id:"porteras-2a", cat:"equipaciones",
+    name:"Equipación Porteras 2ª",
+    desc:"Equipación completa (camiseta, pantalón y medias). Incluye nombre y número. Precio pendiente.",
+    price:null, sizes:["6","8","10","12","S","M","L","XL"], personalizable:true,
+    img:"tienda_assets/equipacion-porteras-2a.png"
+  },
+  {
+    id:"porteras-3a", cat:"equipaciones",
+    name:"Equipación Porteras 3ª",
+    desc:"Equipación completa (camiseta, pantalón y medias). Incluye nombre y número. Precio pendiente.",
+    price:null, sizes:["6","8","10","12","S","M","L","XL"], personalizable:true,
+    img:"tienda_assets/equipacion-porteras-3a.png"
+  },
+
+  // Exterior
+  { id:"chandal", cat:"exterior", name:"Chándal", desc:"Chaqueta + pantalón.", price:40, sizes:["8","10","12","S","M","L","XL"], img:"tienda_assets/chandal.png" },
+  { id:"parka", cat:"exterior", name:"Parka", desc:"Abrigo oficial para invierno.", price:50, sizes:["S","M","L","XL"], img:"tienda_assets/parka.png" },
+  { id:"chubasquero", cat:"exterior", name:"Chubasquero", desc:"Ligero e impermeable.", price:28, sizes:["S","M","L","XL"], img:"tienda_assets/chubasquero.png" },
+  { id:"sudadera-verde", cat:"exterior", name:"Sudadera entreno verde", desc:"Precio pendiente de confirmar.", price:null, sizes:["S","M","L","XL"], img:"tienda_assets/sudadera-entreno-verde.png" },
+  { id:"sudadera-roja", cat:"exterior", name:"Sudadera entreno roja", desc:"Precio pendiente de confirmar.", price:null, sizes:["S","M","L","XL"], img:"tienda_assets/sudadera-entreno-roja.png" },
+
+  // Viaje
+  { id:"macuto", cat:"viaje", name:"Macuto", desc:"Gran capacidad + compartimento inferior.", price:28, sizes:null, img:"tienda_assets/macuto.png" },
+  { id:"mochila", cat:"viaje", name:"Mochila", desc:"Compartimento inferior independiente.", price:20, sizes:null, img:"tienda_assets/mochila.png" },
+  { id:"zapatillero", cat:"viaje", name:"Zapatillero", desc:"Para botas o zapatillas.", price:18, sizes:null, img:"tienda_assets/zapatillero.png" },
+
+  // Accesorios
+  { id:"bufanda", cat:"accesorios", name:"Bufanda", desc:"Bufanda oficial del club.", price:10, sizes:null, img:"tienda_assets/bufanda.jpg" },
+  { id:"bandera", cat:"accesorios", name:"Bandera", desc:"Bandera oficial del club.", price:20, sizes:null, img:"tienda_assets/bandera.jpg" },
+
+  // Otros (lo metemos en viaje para simplificar la estructura pedida)
+  { id:"polo", cat:"viaje", name:"Polo", desc:"Ideal para eventos y uso diario.", price:25, sizes:["S","M","L","XL"], img:"tienda_assets/polo.png" },
+];
+
+// Packs: primera y segunda equipación (jugadoras/jugadores)
+const PACKS = [
+  {
+    id:"pack-1a",
+    title:"Primera equipación (pack)",
+    subtitle:"Camiseta + pantalón corto negro + medias negras",
+    items:[
+      { id:"camiseta-1a", name:"Camiseta 1ª equipación", desc:"Incluye nombre y número.", price:25, sizes:["6","8","10","12","S","M","L","XL"], personalizable:true, img:"tienda_assets/camiseta-1a-equipacion.jpg" },
+      { id:"pantalon-1a", name:"Pantalón corto 1ª (negro)", desc:"Pantalón corto oficial.", price:10, sizes:["6","8","10","12","S","M","L","XL"], img:"tienda_assets/pantalon-corto-1a-negro.png" },
+      { id:"medias-negras", name:"Medias negras", desc:"Medias oficiales (sin foto).", price:8, sizes:["28-31","32-35","36-39","40-43","44-47"], img:"tienda_assets/medias-negras.jpg" }
+    ]
+  },
+  {
+    id:"pack-2a",
+    title:"Segunda equipación (pack)",
+    subtitle:"Camiseta + pantalón corto verde + medias verdes",
+    items:[
+      { id:"camiseta-2a", name:"Camiseta 2ª equipación", desc:"Incluye nombre y número.", price:25, sizes:["6","8","10","12","S","M","L","XL"], personalizable:true, img:"tienda_assets/camiseta-2a-equipacion.png" },
+      { id:"pantalon-2a", name:"Pantalón corto 2ª (verde)", desc:"Pantalón corto oficial.", price:10, sizes:["6","8","10","12","S","M","L","XL"], img:"tienda_assets/pantalon-corto-2a-verde.png" },
+      { id:"medias-verdes", name:"Medias verdes", desc:"Medias oficiales (sin foto).", price:8, sizes:["28-31","32-35","36-39","40-43","44-47"], img:"tienda_assets/medias-verdes.jpg" }
+    ]
+  }
+];
+
+/** =========================
+ *  UI helpers
+ *  ========================= */
+const fmtEUR = (n) => (n ?? 0).toLocaleString("es-ES",{minimumFractionDigits:2, maximumFractionDigits:2})+" €";
+const el = (tag, cls) => { const x=document.createElement(tag); if(cls) x.className=cls; return x; };
+
+function productCard(p, opts={mini:false}){
+  const card = el("article", "card product" + (opts.mini ? " mini" : ""));
+  const imgWrap = el("div","pimg");
+
+  if(p.img){
+    const img = new Image();
+    img.loading="lazy";
+    img.src = p.img;
+    img.alt = p.name;
+    imgWrap.appendChild(img);
+  } else {
+    const ph = el("div","ph");
+    const box = el("div","box"); box.textContent="AD";
+    const txt = el("div"); txt.textContent = "Sin foto";
+    ph.appendChild(box); ph.appendChild(txt);
+    imgWrap.appendChild(ph);
+  }
+
+  const body = el("div","pbody");
+  const top = el("div","ptop");
+  const title = el("div","ptitle"); title.textContent = p.name;
+
+  const price = el("div","price" + (p.price==null ? " pending" : ""));
+  price.textContent = (p.price==null) ? "Precio pendiente" : fmtEUR(p.price);
+
+  top.appendChild(title); top.appendChild(price);
+
+  const desc = el("div","pdesc"); desc.textContent = p.desc || "";
+
+  const meta = el("div","meta");
+  const catTag = el("span","tag"); catTag.textContent = (p.catLabel || "");
+  if(p.catLabel) meta.appendChild(catTag);
+
+  if(p.personalizable){
+    const t = el("span","tag"); t.textContent="Personalizable";
+    meta.appendChild(t);
+  }
+  if(p.sizes && Array.isArray(p.sizes)){
+    const t = el("span","tag"); t.textContent="Tallas";
+    meta.appendChild(t);
+  } else {
+    const t = el("span","tag"); t.textContent="Talla única";
+    meta.appendChild(t);
+  }
+
+  const row = el("div","row");
+  const add = el("button","btn primary");
+  add.type="button";
+  add.textContent = "Añadir";
+  add.onclick = () => { if(p.sizes || p.personalizable || p.img) openProductModal(p); else addToCart(p); };
+
+  const details = el("button","btn");
+  details.type="button";
+  details.textContent = "Ampliar";
+  details.onclick = () => openOptions(p);
+
+  row.appendChild(details);
+  row.appendChild(add);
+
+  body.appendChild(top);
+  body.appendChild(desc);
+  body.appendChild(meta);
+  body.appendChild(row);
+
+  card.appendChild(imgWrap);
+  card.appendChild(body);
+  return card;
+}
+
+function packCard(pack){
+  const card = el("section","card pack");
+  const head = el("div","left");
+  const left = el("div");
+  const h3 = el("h3"); h3.textContent = pack.title;
+  const p = el("p"); p.textContent = pack.subtitle;
+  left.appendChild(h3); left.appendChild(p);
+
+  const right = el("div");
+  const addAll = el("button","btn primary");
+  addAll.type="button";
+  addAll.textContent = "Añadir pack";
+  addAll.onclick = () => { pack.items.forEach(addToCart); openCart(); };
+  right.appendChild(addAll);
+
+  head.appendChild(left);
+  head.appendChild(right);
+
+  const grid = el("div","packgrid");
+  pack.items.forEach(it => {
+    const p2 = { ...it, catLabel:"Equipaciones" };
+    grid.appendChild(productCard(p2, {mini:true}));
+  });
+
+  card.appendChild(head);
+  card.appendChild(grid);
+  return card;
+}
+
+/** =========================
+ *  Modales (producto / guía de tallas)
+ *  ========================= */
+const modalBack = document.getElementById("modalBack");
+const productModal = document.getElementById("productModal");
+const sizeModal = document.getElementById("sizeModal");
+
+function openModal(modal){
+  modalBack.classList.add("open");
+  modal.classList.add("open");
+}
+function closeModals(){
+  modalBack.classList.remove("open");
+  productModal.classList.remove("open");
+  sizeModal.classList.remove("open");
+}
+modalBack.addEventListener("click", closeModals);
+document.getElementById("pmClose").addEventListener("click", closeModals);
+document.getElementById("smClose").addEventListener("click", closeModals);
+document.getElementById("sizeGuideBtn").addEventListener("click", ()=>openModal(sizeModal));
+
+let modalProduct = null;
+
+function openProductModal(p){
+  modalProduct = p;
+
+  document.getElementById("pmTitle").textContent = p.name;
+  document.getElementById("pmDesc").textContent = p.desc || "";
+
+  const priceEl = document.getElementById("pmPrice");
+  priceEl.textContent = (p.price==null) ? "Precio: pendiente de confirmar" : ("Precio: " + fmtEUR(p.price));
+
+  // image
+  const wrap = document.getElementById("pmImgWrap");
+  wrap.innerHTML = "";
+  if(p.img){
+    const img = new Image();
+    img.loading="eager";
+    img.src = p.img;
+    img.alt = p.name;
+    wrap.appendChild(img);
+  } else {
+    wrap.innerHTML = '<div class="ph"><div class="box">AD</div><div>Sin foto</div></div>';
+  }
+
+  // size
+  const sizeField = document.getElementById("pmSizeField");
+  const sizeSel = document.getElementById("pmSize");
+  sizeSel.innerHTML = "";
+  if(p.sizes && Array.isArray(p.sizes)){
+    sizeField.style.display = "";
+    p.sizes.forEach(s=>{
+      const opt=document.createElement("option");
+      opt.value=s; opt.textContent=s;
+      sizeSel.appendChild(opt);
+    });
+  } else {
+    sizeField.style.display = "none";
+  }
+
+  // personalization
+  const showPers = !!p.personalizable;
+  document.getElementById("pmNameField").style.display = showPers ? "" : "none";
+  document.getElementById("pmNumberField").style.display = showPers ? "" : "none";
+  document.getElementById("pmName").value = "";
+  document.getElementById("pmNumber").value = "";
+
+  document.getElementById("pmQty").value = "1";
+
+  openModal(productModal);
+}
+
+function openOptions(p){ openProductModal(p); }
+
+/** =========================
+ *  Carrito
+ *  ========================= */
+const cart = []; // {id,name,price,img,size,personalName,personalNumber,qty}
+function addToCart(p, overrides={}){
+  const key = p.id;
+  const desiredSize = (overrides.size!=null ? overrides.size : (p.sizes ? p.sizes[0] : ""));
+  const desiredName = (overrides.personalName||"");
+  const desiredNum  = (overrides.personalNumber||"");
+  const existing = cart.find(x => x.id===key && (x.size||"")===desiredSize && (x.personalName||"")===desiredName && (x.personalNumber||"")===desiredNum);
+  if(existing){ existing.qty += 1; }
+  else{
+    cart.push({
+      id:p.id, name:p.name, price:p.price, img:p.img || null,
+      sizes:p.sizes || null, personalizable:!!p.personalizable,
+      size:(overrides.size!=null ? overrides.size : (p.sizes ? p.sizes[0] : "")), personalName:(overrides.personalName||""), personalNumber:(overrides.personalNumber||""),
+      qty:1
+    });
+  }
+  renderCart();
+}
+
+function removeItem(idx){ cart.splice(idx,1); renderCart(); }
+function changeQty(idx, delta){
+  cart[idx].qty += delta;
+  if(cart[idx].qty<=0) cart.splice(idx,1);
+  renderCart();
+}
+function cartTotal(){
+  let t=0;
+  cart.forEach(i => { if(i.price!=null) t += i.price * i.qty; });
+  return t;
+}
+
+function renderCart(){
+  document.getElementById("cartCount").textContent = cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById("cartTotal").textContent = fmtEUR(cartTotal());
+
+  const list = document.getElementById("cartList");
+  list.innerHTML = "";
+  if(cart.length===0){
+    const empty = el("div");
+    empty.style.color="var(--muted)";
+    empty.style.fontSize="13px";
+    empty.style.padding="10px 2px";
+    empty.textContent = "Tu carrito está vacío.";
+    list.appendChild(empty);
+    return;
+  }
+
+  cart.forEach((it, idx) => {
+    const row = el("div","item");
+
+    const th = el("div","thumb");
+    if(it.img){
+      const img = new Image();
+      img.src = it.img; img.alt = it.name;
+      th.appendChild(img);
+    } else {
+      th.textContent = "🛍️";
+    }
+
+    const txt = el("div","itxt");
+    const name = el("p","iname"); name.textContent = it.name;
+    const sub = el("p","isub");
+
+    const parts = [];
+    if(it.price==null) parts.push("Precio pendiente");
+    else parts.push(fmtEUR(it.price));
+    if(it.size) parts.push(`Talla: ${it.size}`);
+    if(it.personalizable){
+      if(it.personalName) parts.push(`Nombre: ${it.personalName}`);
+      if(it.personalNumber) parts.push(`Dorsal: ${it.personalNumber}`);
+      if(!it.personalName || !it.personalNumber) parts.push("⚠️ Falta nombre/dorsal");
+    }
+    sub.textContent = parts.join(" · ");
+
+    // controls
+    const qty = el("div","iqty");
+    const minus = el("button","qtybtn"); minus.textContent="–"; minus.onclick=()=>changeQty(idx,-1);
+    const num = el("div","qtynum"); num.textContent = it.qty;
+    const plus  = el("button","qtybtn"); plus.textContent="+"; plus.onclick=()=>changeQty(idx, 1);
+
+    qty.appendChild(minus); qty.appendChild(num); qty.appendChild(plus);
+
+    // editable fields for size/personalization
+    const editWrap = el("div");
+    editWrap.style.marginTop="10px";
+    editWrap.style.display="grid";
+    editWrap.style.gridTemplateColumns="1fr 1fr";
+    editWrap.style.gap="8px";
+
+    if(it.sizes && Array.isArray(it.sizes)){
+      const sel = document.createElement("select");
+      it.sizes.forEach(s=>{
+        const opt=document.createElement("option");
+        opt.value=s; opt.textContent=s;
+        if(s===it.size) opt.selected=true;
+        sel.appendChild(opt);
+      });
+      sel.onchange = ()=>{ it.size = sel.value; renderCart(); };
+      sel.style.gridColumn="span 2";
+      editWrap.appendChild(sel);
+    }
+
+    if(it.personalizable){
+      const inpN = document.createElement("input");
+      inpN.placeholder="Nombre camiseta";
+      inpN.value = it.personalName || "";
+      inpN.oninput = ()=>{ it.personalName = inpN.value.trim(); renderCart(); };
+
+      const inpD = document.createElement("input");
+      inpD.placeholder="Dorsal";
+      inpD.value = it.personalNumber || "";
+      inpD.oninput = ()=>{ it.personalNumber = inpD.value.trim(); renderCart(); };
+
+      editWrap.appendChild(inpN);
+      editWrap.appendChild(inpD);
+    }
+
+    const rm = el("button","qtybtn remove");
+    rm.title="Quitar";
+    rm.textContent="✕";
+    rm.onclick = ()=>removeItem(idx);
+
+    txt.appendChild(name);
+    txt.appendChild(sub);
+    txt.appendChild(qty);
+    if(editWrap.children.length) txt.appendChild(editWrap);
+
+    row.appendChild(th);
+    row.appendChild(txt);
+    row.appendChild(rm);
+    list.appendChild(row);
+  });
+}
+
+/** =========================
+ *  Pedido (WhatsApp)
+ *  ========================= */
+function buildOrderText(){
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const notes = document.getElementById("custNotes").value.trim();
+
+  const lines = [];
+  lines.push("🛒 *Pedido Tienda Amigos del Duero*");
+  if(name) lines.push(`👤 Nombre: ${name}`);
+  if(phone) lines.push(`📞 Tel: ${phone}`);
+  if(notes) lines.push(`📝 Notas: ${notes}`);
+  lines.push("");
+  lines.push("*Productos:*");
+
+  cart.forEach(it=>{
+    let l = `• ${it.name} x${it.qty}`;
+    const extras = [];
+    if(it.size) extras.push(`Talla ${it.size}`);
+    if(it.personalizable){
+      extras.push(`Nombre: ${it.personalName || "PENDIENTE"}`);
+      extras.push(`Dorsal: ${it.personalNumber || "PENDIENTE"}`);
+    }
+    if(it.price==null) extras.push("PRECIO PENDIENTE");
+    else extras.push(fmtEUR(it.price));
+
+    l += " ("+extras.join(" · ")+")";
+    lines.push(l);
+  });
+
+  lines.push("");
+  lines.push(`💶 *Total (solo con precio):* ${fmtEUR(cartTotal())}`);
+  lines.push("");
+  lines.push("— Enviado desde la web");
+  return lines.join("\n");
+}
+
+function sendWhatsApp(){
+  if(cart.length===0){ alert("El carrito está vacío."); return; }
+  const txt = buildOrderText();
+  const url = `https://wa.me/${WHATSAPP_NUMBER_E164}?text=${encodeURIComponent(txt)}`;
+  window.open(url, "_blank", "noopener");
+}
+async function copyOrder(){
+  if(cart.length===0){ alert("El carrito está vacío."); return; }
+  const txt = buildOrderText();
+  try{
+    await navigator.clipboard.writeText(txt);
+    alert("Pedido copiado 👍");
+  }catch(e){
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = txt; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    alert("Pedido copiado 👍");
+  }
+}
+function clearCart(){
+  cart.splice(0, cart.length);
+  renderCart();
+}
+
+/** =========================
+ *  Filtros y render
+ *  ========================= */
+let activeCat = "all";
+
+function renderPills(){
+  const bar = document.getElementById("pillbar");
+  bar.innerHTML = "";
+  CATS.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "pill" + (c.id===activeCat ? " active" : "");
+    b.type="button";
+    b.textContent = c.label;
+    b.onclick = ()=>{
+      activeCat = c.id;
+      document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      applyFilters();
+      // scroll to section
+      if(activeCat==="equipaciones") document.getElementById("sec-equipaciones").scrollIntoView({behavior:"smooth", block:"start"});
+      if(activeCat==="exterior") document.getElementById("sec-exterior").scrollIntoView({behavior:"smooth", block:"start"});
+      if(activeCat==="viaje") document.getElementById("sec-viaje").scrollIntoView({behavior:"smooth", block:"start"});
+      if(activeCat==="accesorios") document.getElementById("sec-accesorios").scrollIntoView({behavior:"smooth", block:"start"});
+    };
+    bar.appendChild(b);
+  });
+}
+
+function applyFilters(){
+  const q = "";
+  // Show/hide sections by category selection
+  const showAll = activeCat==="all";
+  document.getElementById("sec-equipaciones").style.display = (showAll || activeCat==="equipaciones") ? "" : "none";
+  document.getElementById("sec-exterior").style.display    = (showAll || activeCat==="exterior")    ? "" : "none";
+  document.getElementById("sec-viaje").style.display       = (showAll || activeCat==="viaje")       ? "" : "none";
+  document.getElementById("sec-accesorios").style.display  = (showAll || activeCat==="accesorios")  ? "" : "none";
+
+  // For search: filter cards in each grid
+  const filterGrid = (gridId) => {
+    const grid = document.getElementById(gridId);
+    [...grid.children].forEach(card=>{
+      const txt = (card.getAttribute("data-search") || "").toLowerCase();
+      card.style.display = (!q || txt.includes(q)) ? "" : "none";
+    });
+  };
+
+  filterGrid("equipacionesGrid");
+  filterGrid("exteriorGrid");
+  filterGrid("viajeGrid");
+  filterGrid("accesoriosGrid");
+}
+
+function renderAll(){
+  // Equipaciones: packs + porteras
+  const eg = document.getElementById("equipacionesGrid");
+  eg.innerHTML = "";
+  PACKS.forEach(pack=>{
+    const pc = packCard(pack);
+    pc.setAttribute("data-search", (pack.title+" "+pack.subtitle+" "+pack.items.map(i=>i.name).join(" ")));
+    eg.appendChild(pc);
+  });
+  PRODUCTS.filter(p=>p.cat==="equipaciones").forEach(p=>{
+    const card = productCard({...p, catLabel:"Equipaciones"});
+    card.setAttribute("data-search", (p.name+" "+p.desc));
+    eg.appendChild(card);
+  });
+
+  const fill = (gridId, catLabel, cat) => {
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = "";
+    PRODUCTS.filter(p=>p.cat===cat).forEach(p=>{
+      const card = productCard({...p, catLabel});
+      card.setAttribute("data-search", (p.name+" "+p.desc));
+      grid.appendChild(card);
+    });
+  };
+
+  fill("exteriorGrid","Exterior","exterior");
+  fill("viajeGrid","Viaje","viaje");
+  fill("accesoriosGrid","Accesorios","accesorios");
+
+  applyFilters();
+}
+
+/** =========================
+ *  Drawer control
+ *  ========================= */
+const drawer = document.getElementById("drawer");
+const back = document.getElementById("drawerBack");
+function openCart(){ back.classList.add("open"); drawer.classList.add("open"); }
+function closeCart(){ back.classList.remove("open"); drawer.classList.remove("open"); }
+
+document.getElementById("openCartBtn").onclick = ()=>{ renderCart(); openCart(); };
+document.getElementById("closeCartBtn").onclick = closeCart;
+back.onclick = closeCart;
+
+document.getElementById("waBtn").onclick = sendWhatsApp;
+document.getElementById("copyBtn").onclick = copyOrder;
+document.getElementById("clearBtn").onclick = clearCart;
+
+document.getElementById("pmAdd").addEventListener("click", ()=>{
+  if(!modalProduct) return;
+  const qty = parseInt(document.getElementById("pmQty").value || "1", 10);
+  const size = (modalProduct.sizes && Array.isArray(modalProduct.sizes)) ? document.getElementById("pmSize").value : "";
+  const personalName = modalProduct.personalizable ? document.getElementById("pmName").value.trim() : "";
+  const personalNumber = modalProduct.personalizable ? document.getElementById("pmNumber").value.trim() : "";
+  for(let i=0;i<qty;i++){
+    addToCart(modalProduct, { size, personalName, personalNumber });
+  }
+  renderCart();
+  closeModals();
+});
+
+document.getElementById("pmAddGo").addEventListener("click", ()=>{
+  if(!modalProduct) return;
+  const qty = parseInt(document.getElementById("pmQty").value || "1", 10);
+  const size = (modalProduct.sizes && Array.isArray(modalProduct.sizes)) ? document.getElementById("pmSize").value : "";
+  const personalName = modalProduct.personalizable ? document.getElementById("pmName").value.trim() : "";
+  const personalNumber = modalProduct.personalizable ? document.getElementById("pmNumber").value.trim() : "";
+  for(let i=0;i<qty;i++){
+    addToCart(modalProduct, { size, personalName, personalNumber });
+  }
+  renderCart();
+  closeModals();
+  openCart();
+});
+
+
+
+
+// Init
+renderPills();
+renderAll();
+renderCart();
+</script>
+</body>
+</html>
+  // Medias
+  {
+    id:"medias-negras-prod", cat:"equipaciones",
+    name:"Medias negras (1ª equipación)",
+    desc:"Medias oficiales del club.",
+    price:8, sizes:["28-31","32-35","36-39","40-43","44-47"],
+    img:"tienda_assets/medias-negras.jpg"
+  },
+  {
+    id:"medias-verdes-prod", cat:"equipaciones",
+    name:"Medias verdes (2ª equipación)",
+    desc:"Medias oficiales del club.",
+    price:8, sizes:["28-31","32-35","36-39","40-43","44-47"],
+    img:"tienda_assets/medias-verdes.jpg"
+  },
+
